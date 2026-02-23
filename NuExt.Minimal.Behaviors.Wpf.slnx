@@ -4,6 +4,11 @@
     <BuildType Name="Release" />
     <BuildType Name="Sources" />
   </Configurations>
+  <Folder Name="/Samples/">
+    <Project Path="samples/WpfBehaviorsSample/WpfBehaviorsSample.csproj">
+      <Build Solution="Sources|*" Project="false" />
+    </Project>
+  </Folder>
   <Project Path="benchmarks/NuExt.Minimal.Behaviors.Wpf.Benchmarks.csproj">
     <BuildType Solution="Sources|*" Project="Release" />
     <Build Solution="Sources|*" Project="false" />

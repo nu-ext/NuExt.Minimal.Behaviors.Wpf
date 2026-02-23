@@ -1,0 +1,88 @@
+﻿<Window x:Class="WpfBehaviorsSample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:nx="http://schemas.nuext.minimal/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:WpfBehaviorsSample.ViewModels"
+        xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+        xmlns:models="clr-namespace:WpfBehaviorsSample.Models"
+        mc:Ignorable="d"
+        Title="Users" Height="450" Width="950">
+
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <ObjectDataProvider x:Key="UserRolesProvider"
+                                MethodName="GetValues"
+                                ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:UserRole"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <DataGrid ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}"
+                  AutoGenerateColumns="False">
+
+            <DataGrid.Columns>
+                <!-- read-only technicals -->
+                <DataGridTextColumn Header="Id"
+                                    Binding="{Binding Id}"
+                                    IsReadOnly="True"
+                                    Width="220"/>
+
+                <DataGridTextColumn Header="Created"
+                                    Binding="{Binding CreatedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                                    IsReadOnly="True"
+                                    Width="160"/>
+
+                <!-- editable profile -->
+                <DataGridTextColumn Header="Name"
+                                    Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="2*"/>
+
+                <DataGridTextColumn Header="Age"
+                                    Binding="{Binding Age, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="80"
+                                    ElementStyle="{x:Null}" />
+
+                <DataGridTextColumn Header="Email"
+                                    Binding="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="2*"/>
+
+                <DataGridComboBoxColumn Header="Role"
+                                        SelectedItemBinding="{Binding Role, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={StaticResource UserRolesProvider}}"
+                                        Width="120"/>
+
+                <DataGridCheckBoxColumn Header="Active"
+                                        Binding="{Binding IsActive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="80"/>
+            </DataGrid.Columns>
+
+            <nx:Interaction.Behaviors>
+                <nx:EventToCommand EventName="MouseDoubleClick" 
+                                   Command="{Binding SayHelloCommand}"
+                                   EventArgsParameterPath="OriginalSource.DataContext"/>
+            </nx:Interaction.Behaviors>
+        </DataGrid>
+
+        <StatusBar Grid.Row="1">
+            <StatusBarItem>
+                <TextBlock>
+                    <Run Text="Selected User"/>
+                    <Run Text=":"/>
+                    <Run Text="{Binding SelectedUser.Display, Mode=OneWay}"/>
+                </TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
