@@ -2,13 +2,11 @@
 using System.Data;
 using System.Windows;
 
-namespace WpfBehaviorsSample
-{
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-    }
+namespace WpfBehaviorsSample;
 
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application
+{
 }

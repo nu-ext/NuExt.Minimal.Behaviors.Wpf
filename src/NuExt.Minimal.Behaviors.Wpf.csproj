@@ -12,7 +12,7 @@
 Commonly Used Types:
 Minimal.Behaviors.Wpf.EventToCommand
 Minimal.Behaviors.Wpf.KeyToCommand</Description>
-    <Version>0.7.2</Version>
+    <Version>0.7.3</Version>
     <RootNamespace>Minimal.Behaviors.Wpf</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591;NETSDK1233</NoWarn>
