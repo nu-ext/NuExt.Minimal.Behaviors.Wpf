@@ -10,6 +10,10 @@
       <Build Solution="Sources|*" Project="false" />
     </Project>
   </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="README.md" />
+  </Folder>
   <Project Path="benchmarks/NuExt.Minimal.Behaviors.Wpf.Benchmarks.csproj">
     <BuildType Solution="Sources|*" Project="Release" />
     <Build Solution="Sources|*" Project="false" />

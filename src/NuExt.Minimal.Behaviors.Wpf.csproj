@@ -5,21 +5,16 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>disable</ImplicitUsings>
-    <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release' or '$(Configuration)' == 'Sources'">true</GeneratePackageOnBuild>
-    <PackageTags>nuext;nx;minimal;mvvm;wpf;ui;windows;interaction;interactivity;behaviors</PackageTags>
     <Description>Lean WPF interactivity. Provides EventToCommand, KeyToCommand and other behaviors with a minimal API.
 
 Commonly Used Types:
 Minimal.Behaviors.Wpf.EventToCommand
 Minimal.Behaviors.Wpf.KeyToCommand</Description>
-    <Version>0.7.3</Version>
     <RootNamespace>Minimal.Behaviors.Wpf</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591;NETSDK1233</NoWarn>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageIcon>logo.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/nu-ext/NuExt.Minimal.Behaviors.Wpf</PackageProjectUrl>
     <Configurations>Debug;Release;Sources</Configurations>
+    <VersionPrefix>0.7.4</VersionPrefix>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Sources'">
@@ -40,18 +35,13 @@ Minimal.Behaviors.Wpf.KeyToCommand</Description>
     <Content Remove="obj\**" />
   </ItemGroup>
 
-	<ItemGroup>
-		<InternalsVisibleTo Include="$(MSBuildProjectName).Tests" Key="0024000004800000940000000602000000240000525341310004000001000100b789a2ca53134810a04b9629da17625466eca3b89758bedfe43ebb1ed321c10eb969c265dbfe73e8fa34a63a30246654a4db84f23112d88b7f2a61573784f338af6d225b994a3ff0aa17db7faadb09edda35a28a5569a7e389fa501a23215d30987200702b22b86b36becc3780770256448a230c38bbdc0ba30fb21faeae5fbc" />
-		<InternalsVisibleTo Include="$(MSBuildProjectName).Benchmarks" Key="0024000004800000940000000602000000240000525341310004000001000100b789a2ca53134810a04b9629da17625466eca3b89758bedfe43ebb1ed321c10eb969c265dbfe73e8fa34a63a30246654a4db84f23112d88b7f2a61573784f338af6d225b994a3ff0aa17db7faadb09edda35a28a5569a7e389fa501a23215d30987200702b22b86b36becc3780770256448a230c38bbdc0ba30fb21faeae5fbc" />
-	</ItemGroup>
-
   <ItemGroup>
-    <None Include="..\logo.png" Pack="true" PackagePath="\" />
-    <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" Key="0024000004800000940000000602000000240000525341310004000001000100b789a2ca53134810a04b9629da17625466eca3b89758bedfe43ebb1ed321c10eb969c265dbfe73e8fa34a63a30246654a4db84f23112d88b7f2a61573784f338af6d225b994a3ff0aa17db7faadb09edda35a28a5569a7e389fa501a23215d30987200702b22b86b36becc3780770256448a230c38bbdc0ba30fb21faeae5fbc" />
+    <InternalsVisibleTo Include="$(MSBuildProjectName).Benchmarks" Key="0024000004800000940000000602000000240000525341310004000001000100b789a2ca53134810a04b9629da17625466eca3b89758bedfe43ebb1ed321c10eb969c265dbfe73e8fa34a63a30246654a4db84f23112d88b7f2a61573784f338af6d225b994a3ff0aa17db7faadb09edda35a28a5569a7e389fa501a23215d30987200702b22b86b36becc3780770256448a230c38bbdc0ba30fb21faeae5fbc" />
   </ItemGroup>
 
   <Target Name="PostPack" AfterTargets="Pack" Condition="'$(Configuration)' == 'Sources'">
-    <Delete Files="$(OutputPath)\$(PackageId).$(PackageVersion).symbols.nupkg" />
+    <Delete Files="$(PackageOutputPath)\$(PackageId).$(PackageVersion).symbols.nupkg" />
   </Target>
 
 </Project>
