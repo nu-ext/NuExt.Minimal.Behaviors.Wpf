@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NuExt.Minimal.Mvvm" Version="0.7.3" />
-    <PackageReference Include="NuExt.Minimal.Mvvm.SourceGenerator" Version="0.7.2">
+    <PackageReference Include="NuExt.Minimal.Mvvm" Version="0.7.4" />
+    <PackageReference Include="NuExt.Minimal.Mvvm.SourceGenerator" Version="0.7.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
