@@ -3,6 +3,7 @@
 `NuExt.Minimal.Behaviors.Wpf` is a **minimalistic, production‑ready** implementation of WPF **Attached Behaviors** for MVVM. It delivers deterministic, predictable interactivity with ready‑to‑use behaviors (`EventToCommand`, `KeyToCommand`) and template‑driven composition — **dynamic behavior injection via `BehaviorsTemplate`** and **runtime selection via `BehaviorsTemplateSelector`**.
 
 [![NuGet](https://img.shields.io/nuget/v/NuExt.Minimal.Behaviors.Wpf.svg)](https://www.nuget.org/packages/NuExt.Minimal.Behaviors.Wpf)
+[![Ask DeepWiki](https://img.shields.io/badge/Ask-DeepWiki-blue)](https://deepwiki.com/nu-ext/NuExt.Minimal.Behaviors.Wpf)
 [![Build](https://github.com/nu-ext/NuExt.Minimal.Behaviors.Wpf/actions/workflows/ci.yml/badge.svg)](https://github.com/nu-ext/NuExt.Minimal.Behaviors.Wpf/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/nu-ext/NuExt.Minimal.Behaviors.Wpf?label=license)](https://github.com/nu-ext/NuExt.Minimal.Behaviors.Wpf/blob/main/LICENSE)
 [![Downloads](https://img.shields.io/nuget/dt/NuExt.Minimal.Behaviors.Wpf.svg)](https://www.nuget.org/packages/NuExt.Minimal.Behaviors.Wpf)
