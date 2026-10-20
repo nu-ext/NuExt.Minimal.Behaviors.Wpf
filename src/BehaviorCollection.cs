@@ -129,11 +129,36 @@ public sealed class BehaviorCollection : FreezableCollection<Behavior>
         {
             return;
         }
+
         ThrowInvalidOperationExceptionIfAttached();
         AssociatedObject = obj;
-        foreach (Behavior item in this)
+
+        int attachedCount = 0;
+        try
         {
-            item.Attach(AssociatedObject);
+            foreach (Behavior item in this)
+            {
+                item.Attach(obj);
+                attachedCount++;
+            }
+        }
+        catch
+        {
+            // The failing behavior rolls itself back; detach previously attached behaviors
+            for (int i = attachedCount - 1; i >= 0; i--)
+            {
+                try
+                {
+                    this[i].Detach();
+                }
+                catch (Exception ex)
+                {
+                    Debug.Fail(ex.Message);
+                }
+            }
+
+            AssociatedObject = null;
+            throw;
         }
     }
 

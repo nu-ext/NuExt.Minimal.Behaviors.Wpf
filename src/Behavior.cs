@@ -133,10 +133,25 @@ public abstract class Behavior : Animatable, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            Debug.Fail(ex.Message);
-            ResetState();
-            throw;
+            var msg = $"{GetType().Name} exception while Attach: {ex.Message}";
+            Trace.WriteLine(msg);
+            Debug.Fail(msg);
 
+            try
+            {
+                OnDetaching();
+            }
+            catch (Exception cleanupException)
+            {
+                Trace.WriteLine($"{GetType().Name} exception during attach rollback: {cleanupException.Message}");
+                Debug.Fail(cleanupException.Message);
+            }
+            finally
+            {
+                AssociatedObject = null;
+            }
+
+            throw;
         }
     }
 
@@ -157,7 +172,7 @@ public abstract class Behavior : Animatable, INotifyPropertyChanged
         }
         finally
         {
-            ResetState();
+            AssociatedObject = null;
         }
     }
 
@@ -195,12 +210,30 @@ public abstract class Behavior : Animatable, INotifyPropertyChanged
         return (Freezable)ctor.Invoke(null)!;
     }
 
-    private void ResetState()
+    /// <summary>
+    /// Permanently clears the runtime state of a discarded template behavior.
+    /// </summary>
+    /// <remarks>
+    /// Unlike <see cref="Detach"/>, this method also clears bindings and event subscribers.
+    /// </remarks>
+    internal void DisposeState()
     {
-        // Clear bindings to avoid System.Windows.Data Error: 2 : Cannot find governing FrameworkElement or FrameworkContentElement for target element.
-        try { BindingOperations.ClearAllBindings(this); } catch { /* best effort */ }
-        PropertyChanged = null;// Clear all event subscribers to prevent memory leaks
-        AssociatedObject = null;
+        if (IsAttached)
+        {
+            Detach();
+        }
+
+        // Clear bindings to avoid binding diagnostics for discarded template instances
+        try
+        {
+            BindingOperations.ClearAllBindings(this);
+        }
+        catch
+        {
+            // Best effort
+        }
+
+        PropertyChanged = null;
     }
 
     /// <summary>

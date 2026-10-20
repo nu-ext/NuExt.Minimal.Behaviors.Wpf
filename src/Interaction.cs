@@ -277,11 +277,11 @@ public static class Interaction
             // which may trigger "System.Windows.Data Error: 2 : Cannot find governing
             // FrameworkElement or FrameworkContentElement for target element" while bindings
             // still point to the soon-to-be-orphaned target. Pre-detaching avoids this.
-            // Detach() is idempotent; the subsequent collection-driven detach is a no-op.
+            // DisposeState() is idempotent; the subsequent collection-driven detach is a no-op.
             for (int i = oldItems.Count - 1; i >= 0; i--)
             {
                 var behavior = oldItems[i];
-                behavior.Detach();
+                behavior.DisposeState();
                 behaviors.Remove(behavior);
             }
         }

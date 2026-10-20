@@ -10,15 +10,13 @@
 
 **Package ecosystem:** The core package ships the foundational attached behavior infrastructure and essential behaviors for MVVM. For extra behaviors/services, see [`NuExt.Minimal.Mvvm.Wpf`](https://www.nuget.org/packages/NuExt.Minimal.Mvvm.Wpf).
 
----
+## Why NuExt.Minimal.Behaviors.Wpf?
 
-## Why Minimal.Behaviors?
+WPF behaviors are useful, but traditional interaction frameworks often require a stack of triggers and actions to connect one event to one command. `NuExt.Minimal.Behaviors.Wpf` keeps that relationship direct: a behavior subscribes to an event, resolves a command parameter using explicit rules, and invokes the command against a predictable target.
 
-- **Simplicity & maintainability.** No trigger/action stacks. One behavior = one responsibility. Readable, testable, predictable.
-- **Dynamic composition.** `BehaviorsTemplate` and `BehaviorsTemplateSelector` let you define and reuse behavior sets with minimal XAML.
-- **Practical coverage.** Event-to-command binding, keyboard shortcuts, dynamic behavior sets — no hidden indirection.
-- **Deterministic semantics.** Clear command targeting; no focus-based ambiguity.
-- **Performance-focused.** Hot paths avoid allocations. No unnecessary plumbing.
+Behaviors can be declared inline, reused through `BehaviorsTemplate`, or selected dynamically with `BehaviorsTemplateSelector`. Their lifecycle is explicit: behaviors attach in declaration order, detach in reverse order, and roll back partial setup when attachment fails.
+
+The result is a small, dependency-free behavior layer with clear XAML, deterministic command routing, reusable composition, and minimal runtime overhead.
 
 ### Compatibility
 
@@ -26,15 +24,11 @@
 - Works with any MVVM framework.
 - No dependency on external behavior frameworks.
 
----
-
 ## Core Components
 
-- `Interaction` – attached properties: `Behaviors`, `BehaviorsTemplate`, `BehaviorsTemplateSelector`, `BehaviorsTemplateSelectorParameter`.
-- `BehaviorCollection` – observable collection managing behavior lifecycle.
-- `EventToCommand`, `KeyToCommand` – ready-to-use behaviors with a predictable contract.
-
----
+- `Interaction` — attached properties: `Behaviors`, `BehaviorsTemplate`, `BehaviorsTemplateSelector`, and `BehaviorsTemplateSelectorParameter`.
+- `BehaviorCollection` — manages ordered attachment, reverse-order detachment, dynamic changes, and rollback when attachment fails.
+- `EventToCommand` and `KeyToCommand` — ready-to-use behaviors with explicit command targeting and parameter resolution.
 
 ## Core Principle
 
@@ -46,8 +40,6 @@
   <local:MyService />
 </nx:Interaction.Behaviors>
 ```
-
----
 
 ## Quick Start
 1.  **Add the namespace**:
@@ -63,8 +55,6 @@
     </Button>
     ```
 3.  **Define the command** in your ViewModel.
-
----
 
 ### Dynamic Behaviors with BehaviorsTemplate
 Define once, apply many times. The template supports **two** concise formats:
@@ -97,8 +87,6 @@ Define once, apply many times. The template supports **two** concise formats:
 
 <ListBox nx:Interaction.BehaviorsTemplate="{StaticResource EditBehaviors}" />
 ```
-
----
 
 ### Dynamic Selection with BehaviorsTemplateSelector
 Switch behavior sets at runtime:
@@ -138,14 +126,15 @@ public sealed class MyBehaviorSelector : DataTemplateSelector
 > Tip: If no selector parameter is provided, the framework resolves the element’s data item (DataContext, Content, or Header).
 > Bind `BehaviorsTemplateSelectorParameter="{Binding}"` to drive selection from the `DataContext` explicitly when needed.
 
----
-
 ### Practical Scenarios
+
 #### Command on Loaded
+
 ```xml
 <nx:EventToCommand EventName="Loaded" Command="{Binding InitializeCommand}" />
 ```
 #### Deterministic routed events
+
 ```xml
 <ListView>
   <nx:Interaction.Behaviors>
@@ -155,7 +144,9 @@ public sealed class MyBehaviorSelector : DataTemplateSelector
   </nx:Interaction.Behaviors>
 </ListView>
 ```
+
 #### MVVM-friendly per-control shortcuts
+
 ```xml
 <TextBox>
   <nx:Interaction.Behaviors>
@@ -166,18 +157,21 @@ public sealed class MyBehaviorSelector : DataTemplateSelector
 ```
 
 #### Selector reevaluation on DataContext changes
+
 ```xml
 <TextBox nx:Interaction.BehaviorsTemplateSelector="{StaticResource BehaviorSelector}"
          nx:Interaction.BehaviorsTemplateSelectorParameter="{Binding}" />
 ```
 
 #### Handling already-handled routed events (Preview included)
+
 ```xml
 <nx:EventToCommand EventName="PreviewMouseDown" ProcessHandledEvent="True"
                    Command="{Binding PreviewMouseDownCommand}" />
 ```
 
 #### Deterministic command parameter resolution
+
 ```xml
 <nx:EventToCommand EventName="SelectionChanged"
                    Command="{Binding SelectionChangedCommand}"
@@ -280,7 +274,7 @@ namespace MyApp.Behaviors
 - **Keep OnAttached cheap**: defer heavy work via `DispatcherPriority.Background` or offload to a worker.
 - **Thread safety**: marshal UI access to `Dispatcher`.
 - **Order matters**: items in `nx:Interaction.Behaviors` attach **top‑to‑bottom**; place services before/after others if you need specific ordering.
-- **Error handling**: do not swallow exceptions silently; ensure resources are released on failures.
+- **Error handling**: if `OnAttached()` fails, the framework calls `OnDetaching()` to roll back partial setup. Keep these methods symmetrical so cleanup remains safe after partial attachment.
 - **Testability**: keep logic behind clear, minimal methods to simplify unit testing.
 
 ### Deterministic parameters & selector coordination
@@ -298,36 +292,20 @@ namespace MyApp.Behaviors
 > When a converter is set (step 2), `SenderParameterPath` is intentionally ignored.  
 > Without a converter, if both paths are provided, step 3 (`EventArgsParameterPath`) is considered before step 4 (`SenderParameterPath`).
 
----
-
-## What Makes Teams Adopt It
-
-- **Minimal and explicit API surface.** No trigger/action stacks; behaviors are explicit and composable.
-- **Template-driven composition.** Reuse behavior sets via data templates (single or multiple behaviors) — concise and flexible.
-- **Selector-driven switching.** Change behavior sets at runtime with `BehaviorsTemplateSelector` and a single parameter binding.
-- **Consistent WPF semantics.** Clear command targeting; no implicit focus-based resolution.
-- **MVVM-first design.** Clean event → `ICommand` binding with a well-defined parameter precedence.
-- **Predictable behavior lifecycle.** Dynamic composition does not leave dangling references.
-- **Source package option.** Drop-in sources for straightforward embedding and debugging.
-
----
-
 ## Migration from Blend/Interactivity
 
 If your project uses **Blend Behaviors**, **System.Windows.Interactivity**, or **Microsoft.Xaml.Behaviors**, migration is straightforward. Minimal.Behaviors preserves the mental model but removes the heavy trigger/action stack.
 
 |Blend / Interactivity|Minimal equivalent|Notes|
-|---|---|---|
-|Interaction.Behaviors|nx:Interaction.Behaviors|Same structure, predictable lifecycle.|
-|EventTrigger + InvokeCommandAction|nx:EventToCommand|Direct event → `ICommand` binding.|
-|KeyBinding / InputBinding|nx:KeyToCommand|Keyboard gestures per control, MVVM-friendly.|
-|Reusable stacks in resources|BehaviorsTemplate|Define behavior sets once, attach anywhere.|
-|Runtime switching via triggers|BehaviorsTemplateSelector|Cleaner, deterministic selection.|
+|-----------------------------------|---------------------------|-----------------------------------------------|
+|Interaction.Behaviors              | nx:Interaction.Behaviors  | Same structure, predictable lifecycle.        |
+|EventTrigger + InvokeCommandAction | nx:EventToCommand         | Direct event → `ICommand` binding.            |
+|KeyBinding / InputBinding          | nx:KeyToCommand           | Keyboard gestures per control, MVVM-friendly. |
+|Reusable stacks in resources       | BehaviorsTemplate         | Define behavior sets once, attach anywhere.   |
+|Runtime switching via triggers     | BehaviorsTemplateSelector | Cleaner, deterministic selection.             |
 
 **No hidden dependencies, no extra assemblies, no performance traps.**
 Your existing behavior patterns map directly to smaller, clearer equivalents.
-
----
 
 ## Performance Tips
 
@@ -335,8 +313,6 @@ Your existing behavior patterns map directly to smaller, clearer equivalents.
 - **Keep converters lightweight** and pass only required data.
 - **Reuse behavior templates** instead of repeating inline declarations.
 - **Control selector reevaluation**: bind `BehaviorsTemplateSelectorParameter` (typically to `"{Binding}"`) to update only when needed.
-
----
 
 ## Installation
 
