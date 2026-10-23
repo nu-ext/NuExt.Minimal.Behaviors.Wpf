@@ -165,15 +165,37 @@ public sealed class BehaviorCollection : FreezableCollection<Behavior>
     /// <summary>
     /// Detaches the behavior collection from the associated <see cref="DependencyObject"/>.
     /// </summary>
+    /// <exception cref="AggregateException">
+    /// One or more behaviors failed to detach.
+    /// </exception>
     public void Detach()
     {
+        List<Exception>? exceptions = null;
+
         // Detach in reverse order for dependency safety
-        for (int i = Count - 1; i >= 0; i--)
+        try
         {
-            var item = this[i];
-            item.Detach();
+            for (int i = Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    this[i].Detach();
+                }
+                catch (Exception ex)
+                {
+                    (exceptions ??= []).Add(ex);
+                }
+            }
         }
-        AssociatedObject = null;
+        finally
+        {
+            AssociatedObject = null;
+        }
+
+        if (exceptions is not null)
+        {
+            throw new AggregateException("One or more behaviors failed to detach.", exceptions);
+        }
     }
 
     /// <summary>

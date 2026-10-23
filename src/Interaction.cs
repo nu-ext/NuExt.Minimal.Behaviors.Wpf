@@ -298,15 +298,36 @@ public static class Interaction
         }
 
         var newItems = LoadBehaviorsFromTemplate(template);
-
         Debug.Assert(obj.GetValue(BehaviorsSnapshotProperty) == null);
-        if (newItems.Count > 0)
+
+        if (newItems.Count == 0)
         {
-            obj.SetValue(BehaviorsSnapshotProperty, newItems);
+            return;
+        }
+
+        try
+        {
             foreach (var behavior in newItems)
             {
                 behaviors.Add(behavior);
             }
+
+            obj.SetValue(BehaviorsSnapshotProperty, newItems);
+        }
+        catch
+        {
+            for (var i = newItems.Count - 1; i >= 0; i--)
+            {
+                var behavior = newItems[i];
+
+                if (behaviors.Contains(behavior))
+                {
+                    behaviors.Remove(behavior);
+                }
+            }
+
+            obj.ClearValue(BehaviorsSnapshotProperty);
+            throw;
         }
     }
 

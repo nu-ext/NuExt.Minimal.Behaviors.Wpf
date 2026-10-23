@@ -5,11 +5,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>disable</ImplicitUsings>
-    <Description>Lean WPF interactivity. Provides EventToCommand, KeyToCommand and other behaviors with a minimal API.
-
-Commonly Used Types:
-Minimal.Behaviors.Wpf.EventToCommand
-Minimal.Behaviors.Wpf.KeyToCommand</Description>
+    <Description>Minimal, dependency-free WPF interactivity with deterministic behavior lifecycle, direct event-to-command and key-to-command routing, and reusable template-driven behavior composition.</Description>
     <RootNamespace>Minimal.Behaviors.Wpf</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591;NETSDK1233</NoWarn>

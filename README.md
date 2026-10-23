@@ -18,7 +18,7 @@ Behaviors can be declared inline, reused through `BehaviorsTemplate`, or selecte
 
 The result is a small, dependency-free behavior layer with clear XAML, deterministic command routing, reusable composition, and minimal runtime overhead.
 
-### Compatibility
+## Compatibility
 
 - **WPF (.NET 8/9/10 and .NET Framework 4.6.2+)**
 - Works with any MVVM framework.
@@ -27,7 +27,7 @@ The result is a small, dependency-free behavior layer with clear XAML, determini
 ## Core Components
 
 - `Interaction` — attached properties: `Behaviors`, `BehaviorsTemplate`, `BehaviorsTemplateSelector`, and `BehaviorsTemplateSelectorParameter`.
-- `BehaviorCollection` — manages ordered attachment, reverse-order detachment, dynamic changes, and rollback when attachment fails.
+- `BehaviorCollection` — manages ordered attachment, reverse-order detachment, dynamic changes, and resilient cleanup when lifecycle operations fail.
 - `EventToCommand` and `KeyToCommand` — ready-to-use behaviors with explicit command targeting and parameter resolution.
 
 ## Core Principle
@@ -228,14 +228,11 @@ namespace MyApp.Behaviors
             // Prefer control-specific ScrollIntoView when available.
             switch (AssociatedObject)
             {
-                case ListBox lb:
-                    lb.ScrollIntoView(item);
+                case ListBox listBox:
+                    listBox.ScrollIntoView(item);
                     return;
-                case ListView lv:
-                    lv.ScrollIntoView(item);
-                    return;
-                case DataGrid dg:
-                    dg.ScrollIntoView(item);
+                case DataGrid dataGrid:
+                    dataGrid.ScrollIntoView(item);
                     return;
             }
 
