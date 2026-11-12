@@ -20,7 +20,7 @@ The result is a small, dependency-free behavior layer with clear XAML, determini
 
 ## Compatibility
 
-- **WPF (.NET 8/9/10 and .NET Framework 4.6.2+)**
+- **WPF (.NET 8/9/10/11 and .NET Framework 4.6.2+)**
 - Works with any MVVM framework.
 - No dependency on external behavior frameworks.
 
